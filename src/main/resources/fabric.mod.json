@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "hue-border",
+	"version": "${version}",
+	"name": "HueBorder",
+	"description": "Requires Windows 11 (build >220000) to work properly",
+	"authors": [
+		"haloperidozz"
+	],
+	"contact": {
+		"sources": "https://github.com/haloperidozz/hue-border-w11-fabric"
+	},
+	"license": "WTFPL",
+	"icon": "assets/hue-border/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.github.haloperidozz.hueborder.HueBorder"
+		]
+	},
+	"mixins": [
+		"hue-border.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
