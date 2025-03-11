@@ -1,6 +1,7 @@
 package com.github.haloperidozz.hueborder.mixin;
 
-import com.github.haloperidozz.hueborder.border.BorderColorAnimator;
+import com.github.haloperidozz.hueborder.HueBorderAnimator;
+import com.github.haloperidozz.hueborder.win32.version.WinVersion;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -21,17 +22,19 @@ public final class MinecraftClientMixin {
     private Window window;
 
     @Unique
-    private BorderColorAnimator animator = null;
+    private HueBorderAnimator hueBorderAnimator = null;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onInit(CallbackInfo ci) {
-        animator = new BorderColorAnimator(window);
+        if (WinVersion.isWindows11Build22000OrGreater()) {
+            hueBorderAnimator = new HueBorderAnimator(window);
+        }
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
-        if (animator != null) {
-            animator.tick();
+        if (hueBorderAnimator != null) {
+            hueBorderAnimator.tick();
         }
     }
 }

@@ -4,11 +4,7 @@ import com.github.haloperidozz.hueborder.win32.dll.Kernel32;
 import com.sun.jna.Platform;
 
 public final class WinVersion {
-    private static final boolean isWindows11Build22000OrGreater;
-
-    static {
-        isWindows11Build22000OrGreater = isVersionOrGreater(10, 0, 22000);
-    }
+    private static final boolean isWindows11Build22000OrGreater = isVersionOrGreater(10, 0, 22000);
 
     private WinVersion() {
     }
@@ -22,25 +18,19 @@ public final class WinVersion {
             return false;
         }
 
-        Kernel32.OSVERSIONINFOEX.ByReference versionInfo;
-
-        versionInfo = new Kernel32.OSVERSIONINFOEX.ByReference();
+        Kernel32.OSVERSIONINFOEX.ByReference versionInfo = new Kernel32.OSVERSIONINFOEX.ByReference();
         versionInfo.dwOSVersionInfoSize = versionInfo.size();
         versionInfo.dwMajorVersion = major;
         versionInfo.dwMinorVersion = minor;
         versionInfo.dwBuildNumber = buildNumber;
 
-        long conditions = 0;
-
-        conditions = Kernel32.INSTANCE.VerSetConditionMask(
-                conditions, Kernel32.VER_MAJORVERSION, Kernel32.VER_GREATER_EQUAL);
-        conditions = Kernel32.INSTANCE.VerSetConditionMask(
-                conditions, Kernel32.VER_MINORVERSION, Kernel32.VER_GREATER_EQUAL);
-        conditions = Kernel32.INSTANCE.VerSetConditionMask(
-                conditions, Kernel32.VER_BUILDNUMBER, Kernel32.VER_GREATER_EQUAL);
+        long conditionMask = 0;
+        conditionMask = Kernel32.INSTANCE.VerSetConditionMask(conditionMask, Kernel32.VER_MAJORVERSION, Kernel32.VER_GREATER_EQUAL);
+        conditionMask = Kernel32.INSTANCE.VerSetConditionMask(conditionMask, Kernel32.VER_MINORVERSION, Kernel32.VER_GREATER_EQUAL);
+        conditionMask = Kernel32.INSTANCE.VerSetConditionMask(conditionMask, Kernel32.VER_BUILDNUMBER, Kernel32.VER_GREATER_EQUAL);
 
         int typeMask = Kernel32.VER_MAJORVERSION | Kernel32.VER_MINORVERSION | Kernel32.VER_BUILDNUMBER;
 
-        return Kernel32.INSTANCE.VerifyVersionInfoA(versionInfo, typeMask, conditions);
+        return Kernel32.INSTANCE.VerifyVersionInfoA(versionInfo, typeMask, conditionMask);
     }
 }
